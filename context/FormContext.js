@@ -2,6 +2,7 @@ import React, { createContext, useState } from 'react';
 
 const initialFormState = {
   nomeVitima: '',
+  cpf: '',
   fone: '',
   endereco: '',
   numero: '',
@@ -17,10 +18,12 @@ const initialFormState = {
   tabelaVTRs: [
     { vtr: '', unidade: '', litros: '', kmFinal: '', motorista: '' },
   ],
-  tabelaServicosApoio: [{ vtr: '', cidade: '', litros: '' }],
+  tabelaServicosApoio: [
+    { vtr: '', cidade: '', litros: '' }
+  ],
   totalLitrosConsumidos: 0,
   bombeiros: [
-    { nome: '', vtr: ''}
+    { nome: '', vtr: '', combatente: false}
   ],
   demandante: '',
   tipoPerda: '',
@@ -60,6 +63,7 @@ const initialFormState = {
   observacoes: '',
   materiaisDanificadosOcorrencia: '',
   responsavelPeloPreenchimento: '',
+  numeroOcorrencia: '',
 };
 
 export const FormContext = createContext();
@@ -67,7 +71,10 @@ export const FormContext = createContext();
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState({ ...initialFormState });
 
-  const clearForm = () => setFormData({ ...initialFormState });
+  const clearForm = () => {
+    const resetFormData = JSON.parse(JSON.stringify(initialFormState));
+    setFormData(resetFormData);
+  };
 
   return (
     <FormContext.Provider value={{ formData, setFormData, clearForm }}>

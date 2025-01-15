@@ -17,20 +17,20 @@ export default function Step13() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Anotações:</Text>
+      <Text style={styles.label}>Anotações gerais:</Text>
       <TextInput
         style={styles.textArea}
-        placeholder="Digite suas anotações aqui"
+        placeholder="Digite as anotações"
         placeholderTextColor="#ccc"
         value={formData.anotacoes || ''}
         onChangeText={(text) => setFormData({ ...formData, anotacoes: text })}
         multiline
       />
 
-      <Text style={styles.label}>Observações:</Text>
+      <Text style={styles.label}>Observações gerais:</Text>
       <TextInput
         style={styles.textArea}
-        placeholder="Insira suas observações"
+        placeholder="Insira as observações"
         placeholderTextColor="#ccc"
         value={formData.observacoes || ''}
         onChangeText={(text) => setFormData({ ...formData, observacoes: text })}

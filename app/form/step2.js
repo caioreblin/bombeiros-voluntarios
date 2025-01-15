@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-// import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
@@ -11,16 +10,41 @@ export default function Step2() {
   const equipeOptions = ['Alfa', 'Bravo', 'Charlie', 'Delta'];
   const irOptions = ['1', '2', '3'];
 
+  const formatDate = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatTime = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
   const [state, setState] = useState({
-    data: formData.data || '',
-    hch: formData.hch || '',
+    data: formData.data || formatDate(),
+    hch: formData.hch || formatTime(),
     numeroBO: formData.numeroBO || '',
     equipe: formData.equipe || equipeOptions[0],
     despachador: formData.despachador || '',
     codigoIR: formData.codigoIR || irOptions[0],
-  });
+  }); 
 
-  const [pickerVisible, setPickerVisible] = useState({ type: null }); 
+  useEffect(() => {
+    setFormData((prevForm) => ({
+      ...prevForm,
+      data: state.data,
+      hch: state.hch,
+      numeroBO: state.numeroBO,
+      equipe: state.equipe,
+      despachador: state.despachador,
+      codigoIR: state.codigoIR,
+    }));
+  }, []);
 
   const handleChange = (field, value) => {
     let formattedValue = value;
@@ -44,23 +68,10 @@ export default function Step2() {
     setFormData((prevForm) => ({ ...prevForm, [field]: formattedValue }));
   };
 
-  // const handleDateTimeConfirm = (selectedValue) => {
-  //   if (pickerVisible.type === 'date') {
-  //     const formattedDate = new Date(selectedValue).toLocaleDateString('pt-BR');
-  //     handleChange('data', formattedDate);
-  //   } else if (pickerVisible.type === 'time') {
-  //     const formattedTime = new Date(selectedValue).toLocaleTimeString('pt-BR', {
-  //       hour: '2-digit',
-  //       minute: '2-digit',
-  //     });
-  //     handleChange('hch', formattedTime);
-  //   }
-  //   setPickerVisible({ type: null });
-  // };
-
-
   const handleNext = () => {
     console.log('Dados do formulário no Passo 2:', formData);
+    handleChange('data', state.data);
+    handleChange('hch', state.hch);
     router.push('/form/step3');
   };
 
@@ -82,14 +93,6 @@ export default function Step2() {
           value={state.data}
           onChangeText={(value) => handleChange('data', value)}
         />
-        {/* <TouchableOpacity
-          style={styles.input}
-          onPress={() => setPickerVisible({ type: 'date' })}
-        >
-          <Text style={{ color: state.data ? '#000' : '#ccc' }}>
-            {state.data || 'Selecione a data'}
-          </Text>
-        </TouchableOpacity> */}
 
         <Text style={styles.label}>H. CH</Text>
         <TextInput
@@ -100,14 +103,6 @@ export default function Step2() {
           value={state.hch}
           onChangeText={(value) => handleChange('hch', value)}
         />
-        {/* <TouchableOpacity
-          style={styles.input}
-          onPress={() => setPickerVisible({ type: 'time' })}
-        >
-          <Text style={{ color: state.hch ? '#000' : '#ccc' }}>
-            {state.hch || 'Selecione a hora'}
-          </Text>
-        </TouchableOpacity> */}
 
         <Text style={styles.label}>Número B.O.</Text>
         <TextInput
@@ -158,15 +153,6 @@ export default function Step2() {
           <Button title="Voltar" onPress={handleBack} />
           <Button title="Próximo" onPress={handleNext} />
         </View>
-        {/* <DateTimePickerModal
-          isVisible={!!pickerVisible.type}
-          mode={pickerVisible.type}
-          onConfirm={handleDateTimeConfirm}
-          onCancel={() => setPickerVisible({ type: null })}
-          locale="pt-BR"
-          cancelTextIOS="Cancelar"
-          confirmTextIOS="Confirmar"
-        /> */}
       </View>
     </ScrollView>
   );

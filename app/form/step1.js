@@ -10,7 +10,8 @@ export default function Step1() {
   const router = useRouter();
 
   const [state, setState] = useState({
-    nome: formData.nome || '',
+    nomeVitima: formData.nomeVitima || '',
+    cpf: formData.nome || '',
     fone: formData.fone || '',
     endereco: formData.endereco || '',
     numero: formData.numero || '',
@@ -41,10 +42,19 @@ export default function Step1() {
         <Text style={styles.label}>Nome da Vítima</Text>
         <TextInput
           style={styles.input}
-          placeholder="Digite o nome da vítima"
+          placeholder="Digite o nome"
           placeholderTextColor="#ccc"
-          value={state.nome}
-          onChangeText={(value) => handleChange('nome', value)}
+          value={state.nomeVitima}
+          onChangeText={(value) => handleChange('nomeVitima', value)}
+        />
+
+        <Text style={styles.label}>CPF</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o CPF (somente dígitos)"
+          placeholderTextColor="#ccc"
+          value={state.cpf}
+          onChangeText={(value) => handleChange('cpf', value)}
         />
 
         <Text style={styles.label}>Fone</Text>
