@@ -6,14 +6,29 @@ import {
     Button,
     FlatList,
     StyleSheet,
-    TouchableOpacity,
 } from "react-native";
 import { FormContext } from "../../context/FormContext";
 import { useRouter } from "expo-router";
+import { Dropdown } from "react-native-element-dropdown";
 
 export default function Step3() {
     const { formData, setFormData } = useContext(FormContext);
     const router = useRouter();
+
+    const vtrOptions = [
+        { label: "UCIR-0331", value: "UCIR-0331" },
+        { label: "UCI-0330", value: "UCI-0330" },
+        { label: "UCIR-0350", value: "UCIR-0350" },
+        { label: "UTB-0351", value: "UTB-0351" },
+        { label: "UTB-0305", value: "UTB-0305" },
+    ];
+
+    const unidadeOptions = [
+        { label: "Centro", value: "Centro" },
+        { label: "Barra", value: "Barra" },
+        { label: "Nereu", value: "Nereu" },
+        { label: "João Pessoa", value: "João Pessoa" },
+    ];
 
     const handleInputChange = (table, index, field, value) => {
         const updatedTable = [...formData[table]];
@@ -56,7 +71,6 @@ export default function Step3() {
         const updatedTable = [...formData[table]];
         updatedTable.pop();
 
-        // Atualiza o total de litros consumidos
         const totalLitros = [
             ...formData.tabelaVTRs,
             ...formData.tabelaServicosApoio,
@@ -86,33 +100,59 @@ export default function Step3() {
                 keyExtractor={(item, index) => `vtr-${index}`}
                 renderItem={({ item, index }) => (
                     <View style={styles.row}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="VTR"
-                            placeholderTextColor="#ccc"
+                        <Dropdown
+                            style={[styles.input, { height: 50 }]}
+                            containerStyle={{
+                                width: 200,
+                            }}
+                            selectedTextStyle={{ fontSize: 14 }}
+                            itemTextStyle={{ fontSize: 14 }}
+                            data={[
+                                { label: "Selecione...", value: "" },
+                                ...(vtrOptions?.map((val) => ({
+                                    label: val.label,
+                                    value: val.value,
+                                })) || []),
+                            ]}
+                            labelField="label"
+                            valueField="value"
                             value={item.vtr}
-                            onChangeText={(value) =>
+                            onChange={(selected) =>
                                 handleInputChange(
                                     "tabelaVTRs",
                                     index,
                                     "vtr",
-                                    value
+                                    selected.value
                                 )
                             }
+                            maxHeight={290}
                         />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Unidade"
-                            placeholderTextColor="#ccc"
+                        <Dropdown
+                            style={[styles.input, { height: 50 }]}
+                            containerStyle={{
+                                width: 200,
+                            }}
+                            selectedTextStyle={{ fontSize: 14 }}
+                            itemTextStyle={{ fontSize: 14 }}
+                            data={[
+                                { label: "Selecione...", value: "" },
+                                ...(unidadeOptions?.map((val) => ({
+                                    label: val.label,
+                                    value: val.value,
+                                })) || []),
+                            ]}
+                            labelField="label"
+                            valueField="value"
                             value={item.unidade}
-                            onChangeText={(value) =>
+                            onChange={(selected) =>
                                 handleInputChange(
                                     "tabelaVTRs",
                                     index,
                                     "unidade",
-                                    value
+                                    selected.value
                                 )
                             }
+                            maxHeight={290}
                         />
                         <TextInput
                             style={styles.input}
@@ -278,11 +318,12 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        marginHorizontal: 5,
         borderWidth: 1,
         borderColor: "#ccc",
-        padding: 5,
         borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+        marginHorizontal: 5,
     },
     totalContainer: { marginTop: 20 },
     title: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },

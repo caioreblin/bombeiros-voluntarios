@@ -4,10 +4,31 @@ import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
 
 const optionsMap = {
-  'Edificação': ['Alvenaria', 'Concreto', 'Madeira', 'Metálica', 'Outro Tipo'],
-  'Meio de Transporte': ['Aeroviário', 'Ferroviário', 'Rodoviário', 'Outro Tipo'],
-  'Vegetação': ['Capoeira', 'Cultura Agrícola', 'Campo', 'Mato', 'Floresta', 'Pasto', 'Floresta Plantada', 'Outro Tipo'],
-  'Outro Tipo': ['Produtos Perigosos', 'Área de Preservação', 'Outro Tipo'],
+    Edificação: [
+        "Alvenaria",
+        "Concreto",
+        "Madeira",
+        "Metálica",
+        "Mista",
+        "Outro Tipo",
+    ],
+    "Meio de Transporte": [
+        "Aeroviário",
+        "Ferroviário",
+        "Rodoviário",
+        "Outro Tipo",
+    ],
+    Vegetação: [
+        "Capoeira",
+        "Cultura Agrícola",
+        "Campo",
+        "Mato",
+        "Floresta",
+        "Pasto",
+        "Floresta Plantada",
+        "Outro Tipo",
+    ],
+    "Outro Tipo": ["Produtos Perigosos", "Área de Preservação", "Outro Tipo"],
 };
 
 export default function Step8() {

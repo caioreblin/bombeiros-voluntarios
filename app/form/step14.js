@@ -92,9 +92,7 @@ export default function Step14() {
                     <div>Código de IR: <strong>${
                         formData.codigoIR
                     }</strong></div>
-                    <div>Número da ocorrência: <strong>${
-                        formData.numeroOcorrencia
-                    }</strong></div>
+                    <div>Nº do B.O: <strong>${formData.numeroBO}</strong></div>
                 </div>
             </div>
 
@@ -140,10 +138,10 @@ export default function Step14() {
                         <div><span class="details-label">Área atingida</span></div>
                         <div><span class="details-label">Edificada:</span> ${
                             formData.areaAtingida.edificada
-                        }m²</div>
+                        }</div>
                         <div><span class="details-label">Não Edificada:</span> ${
                             formData.areaAtingida.naoEdificada
-                        }m²</div>
+                        }</div>
                         <div><span class="details-label">Tipo de perda:</span> ${
                             formData.tipoPerda
                         }</div>
@@ -152,10 +150,10 @@ export default function Step14() {
                         <div><span class="details-label">Área total</span></div>
                         <div><span class="details-label">Terreno:</span> ${
                             formData.areaTotal.terreno
-                        }m²</div>
+                        }</div>
                         <div><span class="details-label">Imóvel:</span> ${
                             formData.areaTotal.imovel
-                        }m²</div>
+                        }</div>
                     </div>
                 </div>
             </div>
@@ -438,18 +436,6 @@ export default function Step14() {
                         ...formData,
                         responsavelPeloPreenchimento: text,
                     })
-                }
-            />
-
-            <Text style={styles.label}>Número da Ocorrência</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Digite o número da ocorrência"
-                keyboardType="numeric"
-                placeholderTextColor="#ccc"
-                value={formData.numeroOcorrencia || ""}
-                onChangeText={(text) =>
-                    setFormData({ ...formData, numeroOcorrencia: text })
                 }
             />
 

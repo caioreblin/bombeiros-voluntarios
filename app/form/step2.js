@@ -69,9 +69,7 @@ export default function Step2() {
   };
 
   const handleNext = () => {
-    console.log('Dados do formulário no Passo 2:', formData);
-    handleChange('data', state.data);
-    handleChange('hch', state.hch);
+    console.log("Dados do formulário no Passo 2:", formData);
     router.push('/form/step3');
   };
 
