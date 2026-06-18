@@ -9,26 +9,13 @@ import {
 } from "react-native";
 import { FormContext } from "../../context/FormContext";
 import { useRouter } from "expo-router";
-import { Dropdown } from "react-native-element-dropdown";
+import FormDropdown from "../../components/FormDropdown";
+import StepFooter from "../../components/StepFooter";
+import { VTR_OPTIONS, UNIDADE_OPTIONS } from "../../constants/options";
 
 export default function Step3() {
     const { formData, setFormData } = useContext(FormContext);
     const router = useRouter();
-
-    const vtrOptions = [
-        { label: "UCIR-0331", value: "UCIR-0331" },
-        { label: "UCI-0330", value: "UCI-0330" },
-        { label: "UCIR-0350", value: "UCIR-0350" },
-        { label: "UTB-0351", value: "UTB-0351" },
-        { label: "UTB-0305", value: "UTB-0305" },
-    ];
-
-    const unidadeOptions = [
-        { label: "Centro", value: "Centro" },
-        { label: "Barra", value: "Barra" },
-        { label: "Nereu", value: "Nereu" },
-        { label: "João Pessoa", value: "João Pessoa" },
-    ];
 
     const handleInputChange = (table, index, field, value) => {
         const updatedTable = [...formData[table]];
@@ -84,7 +71,6 @@ export default function Step3() {
     };
 
     const handleNext = () => {
-        console.log("Dados do formulário no Passo 3:", formData);
         router.push("/form/step4");
     };
 
@@ -100,57 +86,25 @@ export default function Step3() {
                 keyExtractor={(item, index) => `vtr-${index}`}
                 renderItem={({ item, index }) => (
                     <View style={styles.row}>
-                        <Dropdown
+                        <FormDropdown
                             style={[styles.input, { height: 50 }]}
-                            containerStyle={{
-                                width: 200,
-                            }}
-                            selectedTextStyle={{ fontSize: 14 }}
-                            itemTextStyle={{ fontSize: 14 }}
-                            data={[
-                                { label: "Selecione...", value: "" },
-                                ...(vtrOptions?.map((val) => ({
-                                    label: val.label,
-                                    value: val.value,
-                                })) || []),
-                            ]}
-                            labelField="label"
-                            valueField="value"
+                            containerStyle={{ width: 200 }}
+                            data={VTR_OPTIONS}
+                            includeEmpty
                             value={item.vtr}
-                            onChange={(selected) =>
-                                handleInputChange(
-                                    "tabelaVTRs",
-                                    index,
-                                    "vtr",
-                                    selected.value
-                                )
+                            onChange={(value) =>
+                                handleInputChange("tabelaVTRs", index, "vtr", value)
                             }
                             maxHeight={290}
                         />
-                        <Dropdown
+                        <FormDropdown
                             style={[styles.input, { height: 50 }]}
-                            containerStyle={{
-                                width: 200,
-                            }}
-                            selectedTextStyle={{ fontSize: 14 }}
-                            itemTextStyle={{ fontSize: 14 }}
-                            data={[
-                                { label: "Selecione...", value: "" },
-                                ...(unidadeOptions?.map((val) => ({
-                                    label: val.label,
-                                    value: val.value,
-                                })) || []),
-                            ]}
-                            labelField="label"
-                            valueField="value"
+                            containerStyle={{ width: 200 }}
+                            data={UNIDADE_OPTIONS}
+                            includeEmpty
                             value={item.unidade}
-                            onChange={(selected) =>
-                                handleInputChange(
-                                    "tabelaVTRs",
-                                    index,
-                                    "unidade",
-                                    selected.value
-                                )
+                            onChange={(value) =>
+                                handleInputChange("tabelaVTRs", index, "unidade", value)
                             }
                             maxHeight={290}
                         />
@@ -301,10 +255,7 @@ export default function Step3() {
                 </Text>
             </View>
 
-            <View style={styles.buttonContainer}>
-                <Button title="Voltar" onPress={handleBack} />
-                <Button title="Próximo" onPress={handleNext} />
-            </View>
+            <StepFooter onBack={handleBack} onNext={handleNext} />
         </View>
     );
 }
@@ -328,9 +279,4 @@ const styles = StyleSheet.create({
     totalContainer: { marginTop: 20 },
     title: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
     totalText: { fontSize: 16, fontWeight: "bold", marginBottom: 20 },
-    buttonContainer: {
-        marginTop: 20,
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
 });

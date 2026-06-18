@@ -1,17 +1,16 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Switch, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
+import { colors, commonStyles } from '../../constants/theme';
+import ToggleRow from '../../components/ToggleRow';
+import StepFooter from '../../components/StepFooter';
 
 export default function Step11() {
   const { formData, setFormData } = useContext(FormContext);
   const router = useRouter();
 
-  const [isLavagemPista, setIsLavagemPista] = useState(!!formData.lavagemPista);
-  const [isVazamentoProdutos, setIsVazamentoProdutos] = useState(!!formData.vazamentoProdutosPerigosos);
-
   const handleNext = () => {
-    console.log('Form Data:', formData);
     router.push('/form/step12');
   };
 
@@ -21,76 +20,68 @@ export default function Step11() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Houve</Text>
+      <Text style={commonStyles.title}>Houve</Text>
 
       {/* Lavagem de Pista */}
-      <View style={styles.toggleContainer}>
-        <Text style={styles.labelToggle}>Lavagem de Pista</Text>
-        <Switch
-          value={isLavagemPista}
-          onValueChange={(value) => {
-            setIsLavagemPista(value);
-            if (!value) {
-              setFormData({ ...formData, lavagemPista: false });
-            }
-          }}
-          trackColor={{ false: '#e0e0e0', true: '#ff4d4d' }}
-          thumbColor={isLavagemPista ? '#e21b1b' : '#f4f3f4'}
-        />
-      </View>
+      <ToggleRow
+        bold
+        label="Lavagem de Pista"
+        value={formData.lavagemPista}
+        onValueChange={(value) =>
+          setFormData({
+            ...formData,
+            lavagemPista: value,
+            ...(value ? {} : { litrosLavagemPista: '' }),
+          })
+        }
+      />
 
-      {isLavagemPista && (
+      {formData.lavagemPista && (
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Quantidade de Litros</Text>
           <TextInput
-            style={styles.input}
+            style={commonStyles.input}
             keyboardType="numeric"
             placeholder="Digite a quantidade em litros"
-            placeholderTextColor="#ccc"
-            value={formData.lavagemPista || ''}
-            onChangeText={(text) => setFormData({ ...formData, lavagemPista: text })}
+            placeholderTextColor={colors.placeholder}
+            value={formData.litrosLavagemPista || ''}
+            onChangeText={(text) => setFormData({ ...formData, litrosLavagemPista: text })}
           />
         </View>
       )}
 
       {/* Vazamento de Produtos Perigosos */}
-      <View style={styles.toggleContainer}>
-        <Text style={styles.labelToggle}>Vazamento de Produtos Perigosos</Text>
-        <Switch
-          value={isVazamentoProdutos}
-          onValueChange={(value) => {
-            setIsVazamentoProdutos(value);
-            if (!value) {
-              setFormData({
-                ...formData,
-                vazamentoProdutosPerigosos: false,
-                obsVazamentoProdutosPerigosos: '',
-              });
-            }
-          }}
-          trackColor={{ false: '#e0e0e0', true: '#ff4d4d' }}
-          thumbColor={isVazamentoProdutos ? '#e21b1b' : '#f4f3f4'}
-        />
-      </View>
+      <ToggleRow
+        bold
+        label="Vazamento de Produtos Perigosos"
+        value={formData.vazamentoProdutosPerigosos}
+        onValueChange={(value) =>
+          setFormData({
+            ...formData,
+            vazamentoProdutosPerigosos: value,
+            ...(value ? {} : { nomeProdutoPerigoso: '', obsVazamentoProdutosPerigosos: '' }),
+          })
+        }
+      />
 
-      {isVazamentoProdutos && (
+      {formData.vazamentoProdutosPerigosos && (
         <>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Nome do Produto</Text>
             <TextInput
-              style={styles.input}
+              style={commonStyles.input}
               placeholder="Digite o nome do produto"
-              placeholderTextColor="#ccc"
-              value={formData.vazamentoProdutosPerigosos || ''}
-              onChangeText={(text) => setFormData({ ...formData, vazamentoProdutosPerigosos: text })}
+              placeholderTextColor={colors.placeholder}
+              value={formData.nomeProdutoPerigoso || ''}
+              onChangeText={(text) => setFormData({ ...formData, nomeProdutoPerigoso: text })}
             />
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Observações:</Text>
             <TextInput
-              style={styles.textArea}
+              style={commonStyles.textArea}
               placeholder="Digite observações sobre o vazamento"
-              placeholderTextColor="#ccc"
+              placeholderTextColor={colors.placeholder}
               value={formData.obsVazamentoProdutosPerigosos || ''}
               onChangeText={(text) =>
                 setFormData({ ...formData, obsVazamentoProdutosPerigosos: text })
@@ -102,43 +93,21 @@ export default function Step11() {
         </>
       )}
 
-      <View style={styles.buttonContainer}>
-        <Button title="Voltar" onPress={handleBack} />
-        <Button
-          title="Próximo"
-          onPress={handleNext}
-          disabled={
-            (isLavagemPista && !formData.lavagemPista) ||
-            (isVazamentoProdutos &&
-              (!formData.vazamentoProdutosPerigosos || !formData.obsVazamentoProdutosPerigosos))
-          }
-        />
-      </View>
+      <StepFooter
+        onBack={handleBack}
+        onNext={handleNext}
+        nextDisabled={
+          (formData.lavagemPista && !formData.litrosLavagemPista) ||
+          (formData.vazamentoProdutosPerigosos &&
+            (!formData.nomeProdutoPerigoso || !formData.obsVazamentoProdutosPerigosos))
+        }
+      />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
-  toggleContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 20, justifyContent: 'space-between' },
+  container: { flexGrow: 1, padding: 20, backgroundColor: colors.white },
   label: { fontSize: 16, marginRight: 10, marginBottom: 5 },
-  labelToggle: { fontSize: 16, marginRight: 10, fontWeight: 'bold' },
   inputContainer: { marginBottom: 15 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  textArea: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
 });

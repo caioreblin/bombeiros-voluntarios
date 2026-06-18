@@ -1,61 +1,26 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, TextInput, ScrollView } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
-
-const optionsMap = {
-    Edificação: [
-        "Alvenaria",
-        "Concreto",
-        "Madeira",
-        "Metálica",
-        "Mista",
-        "Outro Tipo",
-    ],
-    "Meio de Transporte": [
-        "Aeroviário",
-        "Ferroviário",
-        "Rodoviário",
-        "Outro Tipo",
-    ],
-    Vegetação: [
-        "Capoeira",
-        "Cultura Agrícola",
-        "Campo",
-        "Mato",
-        "Floresta",
-        "Pasto",
-        "Floresta Plantada",
-        "Outro Tipo",
-    ],
-    "Outro Tipo": ["Produtos Perigosos", "Área de Preservação", "Outro Tipo"],
-};
+import { DETALHE_INCENDIO_MAP } from '../../constants/options';
+import { colors, commonStyles } from '../../constants/theme';
+import OptionSelector from '../../components/OptionSelector';
+import StepFooter from '../../components/StepFooter';
 
 export default function Step8() {
   const { formData, setFormData } = useContext(FormContext);
   const router = useRouter();
-  const [selectedDetail, setSelectedDetail] = useState(formData.detalheIncendio || '');
-  const [observation, setObservation] = useState(formData.observacaoIncendio || '');
-  const [options, setOptions] = useState([]);
-
-  useEffect(() => {
-    if (formData.incendioEm) {
-      setOptions(optionsMap[formData.incendioEm] || []);
-    }
-  }, [formData.incendioEm]);
+  const options = DETALHE_INCENDIO_MAP[formData.incendioEm] || [];
 
   const handleDetailChange = (value) => {
-    setSelectedDetail(value);
     setFormData({ ...formData, detalheIncendio: value });
   };
 
   const handleObservationChange = (value) => {
-    setObservation(value);
     setFormData({ ...formData, observacaoIncendio: value });
   };
 
   const handleNext = () => {
-    console.log('Dados do formulário no Passo 8:', formData);
     router.push('/form/step9');
   };
 
@@ -64,72 +29,28 @@ export default function Step8() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <Text style={styles.title}>{formData.incendioEm}</Text>
-        {options.map((option) => (
-          <TouchableOpacity
-            key={option}
-            style={[
-              styles.optionContainer,
-              selectedDetail === option && styles.selectedOptionContainer,
-            ]}
-            onPress={() => handleDetailChange(option)}
-          >
-            <Text
-              style={[
-                styles.optionText,
-                selectedDetail === option && styles.selectedOptionText,
-              ]}
-            >
-              {option}
-            </Text>
-          </TouchableOpacity>
-        ))}
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.title}>{formData.incendioEm}</Text>
+        <OptionSelector
+          options={options}
+          selected={formData.detalheIncendio}
+          onSelect={handleDetailChange}
+        />
 
-        <Text style={styles.label}>Observação:</Text>
+        <Text style={[commonStyles.label, { marginTop: 20 }]}>Observação:</Text>
         <TextInput
-          style={styles.textArea}
-          value={observation}
+          style={commonStyles.textArea}
+          value={formData.observacaoIncendio}
           onChangeText={handleObservationChange}
           multiline
           numberOfLines={4}
           placeholder="Digite observações sobre o incêndio"
-          placeholderTextColor="#ccc"
+          placeholderTextColor={colors.placeholder}
         />
 
-        <View style={styles.buttonContainer}>
-          <Button title="Voltar" onPress={handleBack} />
-          <Button title="Próximo" onPress={handleNext} />
-        </View>
+        <StepFooter onBack={handleBack} onNext={handleNext} />
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-  },
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
-  optionContainer: {
-    padding: 10,
-    borderRadius: 5,
-    marginVertical: 5,
-    backgroundColor: '#f0f0f0',
-  },
-  optionText: { fontSize: 16 },
-  selectedOptionContainer: { backgroundColor: '#e21b1b' },
-  selectedOptionText: { color: '#fff', fontWeight: 'bold' },
-  label: { marginTop: 20, marginBottom: 5, fontSize: 16 },
-  textArea: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
-});

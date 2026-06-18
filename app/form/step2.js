@@ -1,14 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { FormContext } from '../../context/FormContext';
-import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
+import { formatDateInput, formatTimeInput } from '../../utils/masks';
+import { validateStep } from '../../validation/stepValidation';
+import { EQUIPE_OPTIONS, IR_OPTIONS } from '../../constants/options';
+import { colors, commonStyles } from '../../constants/theme';
+import FormDropdown from '../../components/FormDropdown';
+import StepFooter from '../../components/StepFooter';
 
 export default function Step2() {
   const { formData, setFormData } = useContext(FormContext);
   const router = useRouter();
-  const equipeOptions = ['Alfa', 'Bravo', 'Charlie', 'Delta'];
-  const irOptions = ['1', '2', '3'];
 
   const formatDate = () => {
     const now = new Date();
@@ -25,24 +28,15 @@ export default function Step2() {
     return `${hours}:${minutes}`;
   };
 
-  const [state, setState] = useState({
-    data: formData.data || formatDate(),
-    hch: formData.hch || formatTime(),
-    numeroBO: formData.numeroBO || '',
-    equipe: formData.equipe || equipeOptions[0],
-    despachador: formData.despachador || '',
-    codigoIR: formData.codigoIR || irOptions[0],
-  }); 
+  const { valid, errors } = validateStep(2, formData);
 
   useEffect(() => {
     setFormData((prevForm) => ({
       ...prevForm,
-      data: state.data,
-      hch: state.hch,
-      numeroBO: state.numeroBO,
-      equipe: state.equipe,
-      despachador: state.despachador,
-      codigoIR: state.codigoIR,
+      data: prevForm.data || formatDate(),
+      hch: prevForm.hch || formatTime(),
+      equipe: prevForm.equipe || EQUIPE_OPTIONS[0],
+      codigoIR: prevForm.codigoIR || IR_OPTIONS[0],
     }));
   }, []);
 
@@ -50,26 +44,17 @@ export default function Step2() {
     let formattedValue = value;
 
     if (field === 'data') {
-      formattedValue = value
-        .replace(/\D/g, '')
-        .replace(/(\d{2})(\d)/, '$1/$2')
-        .replace(/(\d{2})(\d)/, '$1/$2')
-        .slice(0, 10);
+      formattedValue = formatDateInput(formData.data, value);
     }
 
     if (field === 'hch') {
-      formattedValue = value
-        .replace(/\D/g, '')
-        .replace(/(\d{2})(\d)/, '$1:$2')
-        .slice(0, 5);
+      formattedValue = formatTimeInput(formData.hch, value);
     }
 
-    setState((prevState) => ({ ...prevState, [field]: formattedValue }));
     setFormData((prevForm) => ({ ...prevForm, [field]: formattedValue }));
   };
 
   const handleNext = () => {
-    console.log("Dados do formulário no Passo 2:", formData);
     router.push('/form/step3');
   };
 
@@ -78,96 +63,74 @@ export default function Step2() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Dados da Ocorrência</Text>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.title}>Dados da Ocorrência</Text>
 
-        <Text style={styles.label}>Data</Text>
+        <Text style={commonStyles.label}>Data</Text>
         <TextInput
-          style={styles.input}
+          style={commonStyles.input}
           placeholder="Digite a data (DD/MM/AAAA)"
-          placeholderTextColor="#ccc"
+          placeholderTextColor={colors.placeholder}
           keyboardType="numeric"
-          value={state.data}
+          value={formData.data}
           onChangeText={(value) => handleChange('data', value)}
         />
+        {errors.data && <Text style={commonStyles.errorText}>{errors.data}</Text>}
 
-        <Text style={styles.label}>H. CH</Text>
+        <Text style={commonStyles.label}>H. CH</Text>
         <TextInput
-          style={styles.input}
+          style={commonStyles.input}
           placeholder="Digite a data (DD/MM/AAAA)"
-          placeholderTextColor="#ccc"
+          placeholderTextColor={colors.placeholder}
           keyboardType="numeric"
-          value={state.hch}
+          value={formData.hch}
           onChangeText={(value) => handleChange('hch', value)}
         />
+        {errors.hch && <Text style={commonStyles.errorText}>{errors.hch}</Text>}
 
-        <Text style={styles.label}>Número B.O.</Text>
+        <Text style={commonStyles.label}>Número B.O.</Text>
         <TextInput
-          style={styles.input}
+          style={commonStyles.input}
           placeholder="Digite o número do B.O."
-          placeholderTextColor="#ccc"
+          placeholderTextColor={colors.placeholder}
           keyboardType="numeric"
-          value={state.numeroBO}
+          value={formData.numeroBO}
           onChangeText={(value) => handleChange('numeroBO', value)}
         />
+        {errors.numeroBO && <Text style={commonStyles.errorText}>{errors.numeroBO}</Text>}
 
-        <Text style={styles.label}>Equipe</Text>
-        <Dropdown
-          style={styles.input}
-          selectedTextStyle={{ fontSize: 14 }}
-          itemTextStyle={{ fontSize: 14 }}
-          data={equipeOptions?.map((val) => ({ label: val, value: val })) || []}
-          labelField="label"
-          valueField="value"
-          value={state.equipe}
-          onChange={(item) => handleChange('equipe', item.value)}
-          maxHeight={190}
+        <Text style={commonStyles.label}>Equipe</Text>
+        <FormDropdown
+          style={styles.dropdown}
+          data={EQUIPE_OPTIONS}
+          value={formData.equipe}
+          onChange={(value) => handleChange('equipe', value)}
         />
 
-        <Text style={styles.label}>Despachador</Text>
+        <Text style={commonStyles.label}>Despachador</Text>
         <TextInput
-          style={styles.input}
+          style={commonStyles.input}
           placeholder="Digite o nome do despachador"
-          placeholderTextColor="#ccc"
-          value={state.despachador}
+          placeholderTextColor={colors.placeholder}
+          value={formData.despachador}
           onChangeText={(value) => handleChange('despachador', value)}
         />
 
-        <Text style={styles.label}>Código de IR</Text>
-        <Dropdown
-          style={styles.input}
-          selectedTextStyle={{ fontSize: 14 }}
-          itemTextStyle={{ fontSize: 14 }}
-          data={irOptions?.map((val) => ({ label: val, value: val })) || []}
-          labelField="label"
-          valueField="value"
-          value={state.codigoIR}
-          onChange={(item) => handleChange('codigoIR', item.value)}
-          maxHeight={190}
+        <Text style={commonStyles.label}>Código de IR</Text>
+        <FormDropdown
+          style={styles.dropdown}
+          data={IR_OPTIONS}
+          value={formData.codigoIR}
+          onChange={(value) => handleChange('codigoIR', value)}
         />
 
-        <View style={styles.buttonContainer}>
-          <Button title="Voltar" onPress={handleBack} />
-          <Button title="Próximo" onPress={handleNext} />
-        </View>
+        <StepFooter onBack={handleBack} onNext={handleNext} nextDisabled={!valid} />
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: { flexGrow: 1 },
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
-  label: { fontSize: 16, marginBottom: 5 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    justifyContent: 'center',
-  },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
+  dropdown: { justifyContent: 'center' },
 });

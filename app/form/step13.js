@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
+import { colors, commonStyles } from '../../constants/theme';
+import StepFooter from '../../components/StepFooter';
 
 export default function Step13() {
   const { formData, setFormData } = useContext(FormContext);
@@ -16,57 +18,42 @@ export default function Step13() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Anotações gerais:</Text>
+    <View style={commonStyles.container}>
+      <Text style={commonStyles.label}>Anotações gerais:</Text>
       <TextInput
-        style={styles.textArea}
+        style={[commonStyles.textArea, styles.textArea]}
         placeholder="Digite as anotações"
-        placeholderTextColor="#ccc"
+        placeholderTextColor={colors.placeholder}
         value={formData.anotacoes || ''}
         onChangeText={(text) => setFormData({ ...formData, anotacoes: text })}
         multiline
       />
 
-      <Text style={styles.label}>Observações gerais:</Text>
+      <Text style={commonStyles.label}>Observações gerais:</Text>
       <TextInput
-        style={styles.textArea}
+        style={[commonStyles.textArea, styles.textArea]}
         placeholder="Insira as observações"
-        placeholderTextColor="#ccc"
+        placeholderTextColor={colors.placeholder}
         value={formData.observacoes || ''}
         onChangeText={(text) => setFormData({ ...formData, observacoes: text })}
         multiline
       />
 
-      <Text style={styles.label}>Materiais Danificados na Ocorrência:</Text>
+      <Text style={commonStyles.label}>Materiais Danificados na Ocorrência:</Text>
       <TextInput
-        style={styles.textArea}
+        style={[commonStyles.textArea, styles.textArea]}
         placeholder="Descreva os materiais danificados"
-        placeholderTextColor="#ccc"
+        placeholderTextColor={colors.placeholder}
         value={formData.materiaisDanificadosOcorrencia || ''}
         onChangeText={(text) => setFormData({ ...formData, materiaisDanificadosOcorrencia: text })}
         multiline
       />
 
-      <View style={styles.buttonContainer}>
-        <Button title="Voltar" onPress={handleBack} />
-        <Button title="Próximo" onPress={handleNext} />
-      </View>
+      <StepFooter onBack={handleBack} onNext={handleNext} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  label: { fontSize: 16, marginBottom: 5 },
-  textArea: {
-    width: '100%',
-    height: 100,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    textAlignVertical: 'top',
-    marginBottom: 20,
-  },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', width: '100%' },
+  textArea: { width: '100%', marginBottom: 20 },
 });

@@ -1,0 +1,287 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildReportHtml matches the snapshot for a filled report 1`] = `
+"
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                .section-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border: 1px solid black;
+                    padding: 10px;
+                    border-radius: 10px;
+                    font-family: Arial, sans-serif;
+                }
+
+                .logo-container img {
+                    width: 80px;
+                    height: auto;
+                }
+
+                .info-container {
+                    text-align: center;
+                    font-family: Arial, sans-serif;
+                }
+
+                .details-container {
+                    font-family: Arial, sans-serif;
+                    border: 1px solid black;
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-top: 10px;
+                }
+
+                .details-row {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .details-row div {
+                    margin: 5px 0;
+                    width: 50%;
+                    text-align: left;
+                }
+
+                .details-label {
+                    font-weight: bold;
+                }
+
+                .details-title {
+                    font-weight: normal;
+                    margin-bottom: 10px;
+                }
+
+                td, th {
+                    text-align: center;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="section-container">
+                <div class="logo-container">
+                    <img src="data:image/png;base64,SAMPLELOGO" alt="Logo dos Bombeiros Voluntários">
+                </div>
+
+                <div class="info-container">
+                    <strong>Associação de Serviços Sociais Voluntários de Jaraguá do Sul</strong>
+                    <br>
+                    <strong>Bombeiros Voluntários</strong>
+                </div>
+
+                <div class="details-container" style="margin-top: 0px;">
+                    <div>Data: <strong>01/02/2024</strong></div>
+                    <div>Hora: <strong>14:30</strong></div>
+                    <div>Equipe: <strong>Alfa</strong></div>
+                    <div>Código de IR: <strong>2</strong></div>
+                    <div>Nº do B.O: <strong>987</strong></div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-row">
+                    <div><span class="details-label">Nome do Proprietário:</span> Ana Silva</div>
+                    <div><span class="details-label">CPF:</span> 12345678900</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">Endereço:</span> Rua das Flores</div>
+                    <div><span class="details-label">Bairro:</span> Centro</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">Número:</span> 100</div>
+                    <div><span class="details-label">Fone:</span> 4799990000</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">Responsável pelo imóvel:</span> Proprietário</div>
+                    <div><span class="details-label">Empresa:</span> Não</div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Informações sobre o Incêndio</div>
+                <div class="details-row">
+                    <div>
+                        <div><span class="details-label">Área atingida</span></div>
+                        <div><span class="details-label">Edificada:</span> 50 m²</div>
+                        <div><span class="details-label">Não Edificada:</span> 20 m²</div>
+                        <div><span class="details-label">Tipo de perda:</span> Parcial</div>
+                    </div>
+                    <div>
+                        <div><span class="details-label">Área total</span></div>
+                        <div><span class="details-label">Terreno:</span> 300 m²</div>
+                        <div><span class="details-label">Imóvel:</span> 120 m²</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Vazamento de produto perigoso</div>
+                <div class="details-row">
+                    <div style="width: 100%;">
+                        <div><span class="details-label">Houve vazamento:</span> Não</div>
+                        <div><span class="details-label">Nome do produto:</span> N/A</div>
+                        <div><span class="details-label">OBS:</span> N/A</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Vazamento de Gás</div>
+                <div class="details-row">
+                    <div style="width: 100%;">
+                        <div><span class="details-label">Houve vazamento:</span> Sim</div>
+                        <div><span class="details-label">Tipo de gás:</span> G.L.P.</div>
+                        <div><span class="details-label">OBS:</span> Cheiro forte no local</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Lavagem de Pista</div>
+                <div class="details-row">
+                    <div style="width: 100%;">
+                        <div><span class="details-label">Houve lavagem:</span> Sim</div>
+                        <div><span class="details-label">Litros utilizados:</span> 300</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Sistema de prevenção existentes</div>
+                <div class="details-row">
+                    <div><span class="details-label">SPE - Extintores:</span> Sim</div>
+                    <div><span class="details-label">EE - Elevador de emergência:</span> Não</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">SHP - Hidrantes:</span> Não</div>
+                    <div><span class="details-label">Exaustão de fumaça:</span> Não</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">SIE - Iluminação de emergência:</span> Não</div>
+                    <div><span class="details-label">Ventilação permanente (GLP):</span> Não</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">SADI - Alarme:</span> Sim</div>
+                    <div><span class="details-label">Compartimentação:</span> Sim</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">SPK - Sprinkler:</span> Não</div>
+                    <div><span class="details-label">Acesso de viaturas:</span> Sim</div>
+                </div>
+                <div class="details-row">
+                    <div><span class="details-label">Sinalização p/ abandono:</span> Sim</div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-row">
+                    <div><span class="details-label">Usado extintor: </span> Sim</div>
+                    <div><span class="details-label">Quantos:</span> 2</div>
+                    <div><span class="details-label">Tipo:</span> P.Q.S</div>
+                    <div><span class="details-label">Da onde:</span> Edificação</div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Tabela de viaturas</div>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ddd; padding: 8px;">VTR</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Unidade</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Água consumida (L)</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Km final</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Motorista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">UCIR-0331</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Centro</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">500</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">1200</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Pedro</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Serviços de apoio</div>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ddd; padding: 8px;">VTR</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Cidade</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Água consumida (L)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">UTB-0305</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Guaramirim</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">200</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="details-container">
+                <div class="details-row">
+                    <div><span class="details-label">Total de água consumida (L): </span> 700</div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div class="details-title">Guarnição</div>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Nome</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">VTR</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Combatente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">João</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">UCIR-0331</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Sim</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Maria</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">UCIR-0331</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Não</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="details-container">
+                <div class="details-row">
+                    <div><span class="details-label">Demandante da ocorrência: </span> Vizinho</div>
+                    <div><span class="details-label">Total de bombeiros envolvidos: </span> 2</div>
+                </div>
+            </div>
+
+            <div class="details-container">
+                <div><span class="details-label">Observações gerais:</span></div>
+                <div>Ocorrência encerrada</div>
+            </div>
+
+            <div class="details-container">
+                <div><span class="details-label">Materiais danificados na ocorrência:</span></div>
+                <div>Fiação</div>
+            </div>
+
+            <div class="details-container">
+                <div><span class="details-label">Despachador:</span> Carlos</div>
+                <div><span class="details-label">Responsável pelo preenchimento:</span> Sgt. Lima</div>
+            </div>
+        </body>
+        </html>
+      "
+`;

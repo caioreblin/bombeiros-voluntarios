@@ -2,16 +2,19 @@ import React, { useContext } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
-import { Dropdown } from 'react-native-element-dropdown';
+import { validateStep } from '../../validation/stepValidation';
+import FormDropdown from '../../components/FormDropdown';
+import StepFooter from '../../components/StepFooter';
 
 export default function Step4() {
   const { formData, setFormData } = useContext(FormContext);
   const router = useRouter();
+  const { valid, errors } = validateStep(4, formData);
 
   const handleAddBombeiro = () => {
     setFormData({
       ...formData,
-      bombeiros: [...formData.bombeiros, { nome: '', vtr: '' }], // Adiciona um novo objeto vazio
+      bombeiros: [...formData.bombeiros, { nome: '', vtr: '', combatente: false }], // Adiciona um novo objeto vazio
     });
   };
 
@@ -29,7 +32,6 @@ export default function Step4() {
   };
 
   const handleNext = () => {
-    console.log('Dados do formulário no Passo 4:', formData);
     router.push('/form/step5');
   };
 
@@ -53,19 +55,12 @@ export default function Step4() {
               value={item.nome}
               onChangeText={(value) => handleBombeiroChange(index, 'nome', value)}
             />
-            <Dropdown
+            <FormDropdown
               style={styles.input}
-              selectedTextStyle={{ fontSize: 14 }}
-              itemTextStyle={{ fontSize: 14 }}
-              data={
-                [{ label: 'Selecione...', value: '' }, 
-                ...(formData.tabelaVTRs?.map((val) => ({ label: val.vtr, value: val.vtr })) || [])]
-              }
-              labelField="label"
-              valueField="value"
+              data={formData.tabelaVTRs?.map((val) => ({ label: val.vtr, value: val.vtr })) || []}
+              includeEmpty
               value={item.vtr}
-              onChange={(selected) => handleBombeiroChange(index, 'vtr', selected.value)}
-              maxHeight={190}
+              onChange={(value) => handleBombeiroChange(index, 'vtr', value)}
             />
             {formData.bombeiros.length > 1 && (
               <TouchableOpacity onPress={() => handleRemoveBombeiro(index)} style={styles.removeButton}>
@@ -75,7 +70,10 @@ export default function Step4() {
           </View>
         )}
         ListFooterComponent={
-          <Button title="Adicionar Bombeiro" onPress={handleAddBombeiro} />
+          <>
+            <Button title="Adicionar Bombeiro" onPress={handleAddBombeiro} />
+            {errors.bombeiros && <Text style={styles.errorText}>{errors.bombeiros}</Text>}
+          </>
         }
       />
 
@@ -88,10 +86,7 @@ export default function Step4() {
         onChangeText={(value) => setFormData({ ...formData, demandante: value })}
       />
 
-      <View style={styles.buttonContainer}>
-        <Button title="Voltar" onPress={handleBack} />
-        <Button title="Próximo" onPress={handleNext} />
-      </View>
+      <StepFooter onBack={handleBack} onNext={handleNext} nextDisabled={!valid} />
     </View>
   );
 }
@@ -131,7 +126,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
+  errorText: { color: 'red', fontSize: 12, marginTop: 5, marginBottom: 10 },
   containerFlatList: {
     marginBottom: 10,
   },

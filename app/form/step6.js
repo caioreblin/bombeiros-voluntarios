@@ -1,15 +1,18 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
+import { formatAreaInput } from '../../utils/masks';
+import { TIPO_PERDA_OPTIONS } from '../../constants/options';
+import { colors, commonStyles } from '../../constants/theme';
+import OptionSelector from '../../components/OptionSelector';
+import StepFooter from '../../components/StepFooter';
 
 export default function Step6() {
   const { formData, setFormData } = useContext(FormContext);
   const router = useRouter();
-  const [selectedPerda, setSelectedPerda] = useState(formData.tipoPerda || '');
 
   const handleSelectPerda = (value) => {
-    setSelectedPerda(value);
     setFormData({ ...formData, tipoPerda: value });
   };
 
@@ -18,13 +21,12 @@ export default function Step6() {
       ...formData,
       [section]: {
         ...formData[section],
-        [field]: value.replace(/\D/g, '') + ' m²',
+        [field]: formatAreaInput(formData[section][field], value),
       },
     });
   };
 
   const handleNext = () => {
-    console.log('Dados do formulário no Passo 5:', formData);
     router.push('/form/step7');
   };
 
@@ -33,111 +35,71 @@ export default function Step6() {
   };
 
   const renderAreaInputs = (section, fields) => (
-      <>
-          {fields.map((field) => (
-              <View key={field.form}>
-                  <Text style={styles.label}>{field.label}</Text>
-                  <TextInput
-                      style={styles.input}
-                      placeholder={`Exemplo: 500 m²`}
-                      placeholderTextColor="#ccc"
-                      value={formData[section][field.form]}
-                      onChangeText={(value) =>
-                          handleInputChange(section, field.form, value)
-                      }
-                      keyboardType="numeric"
-                  />
-              </View>
-          ))}
-      </>
+    <>
+      {fields.map((field) => (
+        <View key={field.form}>
+          <Text style={commonStyles.label}>{field.label}</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Exemplo: 500 m²"
+            placeholderTextColor={colors.placeholder}
+            value={formData[section][field.form]}
+            onChangeText={(value) => handleInputChange(section, field.form, value)}
+            keyboardType="numeric"
+          />
+        </View>
+      ))}
+    </>
   );
 
   return (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.container}>
-              <Text style={styles.title}>Informações Sobre o Incêndio</Text>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+      <View style={commonStyles.container}>
+        <Text style={styles.title}>Informações Sobre o Incêndio</Text>
 
-              <Text style={styles.label}>Tipo de Perda</Text>
-              <View style={styles.radioGroup}>
-                  {["Total", "Parcial", "Insignificante"].map((option) => (
-                      <TouchableOpacity
-                          key={option}
-                          style={[
-                              styles.radioButton,
-                              selectedPerda === option &&
-                                  styles.radioButtonSelected,
-                          ]}
-                          onPress={() => handleSelectPerda(option)}
-                      >
-                          <Text
-                              style={
-                                  selectedPerda === option
-                                      ? styles.radioTextSelected
-                                      : styles.radioText
-                              }
-                          >
-                              {option}
-                          </Text>
-                      </TouchableOpacity>
-                  ))}
-              </View>
+        <Text style={commonStyles.label}>Tipo de Perda</Text>
+        <OptionSelector
+          horizontal
+          options={TIPO_PERDA_OPTIONS}
+          selected={formData.tipoPerda}
+          onSelect={handleSelectPerda}
+        />
 
-              <Text style={styles.label}>Possível Causa do Incêndio</Text>
-              <TextInput
-                  style={[styles.input, styles.textArea]}
-                  placeholder="Descreva a possível causa do incêndio"
-                  placeholderTextColor="#ccc"
-                  multiline
-                  value={formData.causaIncendio}
-                  onChangeText={(value) =>
-                      setFormData({ ...formData, causaIncendio: value })
-                  }
-              />
+        <Text style={commonStyles.label}>Possível Causa do Incêndio</Text>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Descreva a possível causa do incêndio"
+          placeholderTextColor={colors.placeholder}
+          multiline
+          value={formData.causaIncendio}
+          onChangeText={(value) => setFormData({ ...formData, causaIncendio: value })}
+        />
 
-              <Text style={styles.title}>Área Atingida</Text>
-              {renderAreaInputs("areaAtingida", [
-                  { label: "Edificada", form: "edificada" },
-                  { label: "Não Edificada", form: "naoEdificada" },
-              ])}
+        <Text style={styles.title}>Área Atingida</Text>
+        {renderAreaInputs('areaAtingida', [
+          { label: 'Edificada', form: 'edificada' },
+          { label: 'Não Edificada', form: 'naoEdificada' },
+        ])}
 
-              <Text style={[styles.title, { marginTop: 15 }]}>Área Total</Text>
-              {renderAreaInputs("areaTotal", [
-                  { label: "Imóvel", form: "imovel" },
-                  { label: "Terreno", form: "terreno" },
-              ])}
+        <Text style={[styles.title, { marginTop: 15 }]}>Área Total</Text>
+        {renderAreaInputs('areaTotal', [
+          { label: 'Imóvel', form: 'imovel' },
+          { label: 'Terreno', form: 'terreno' },
+        ])}
 
-              <View style={styles.buttonContainer}>
-                  <Button title="Voltar" onPress={handleBack} />
-                  <Button title="Próximo" onPress={handleNext} />
-              </View>
-          </View>
-      </ScrollView>
+        <StepFooter onBack={handleBack} onNext={handleNext} />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: { flexGrow: 1 },
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
   title: { fontSize: 18, fontWeight: 'bold', marginVertical: 10 },
-  label: { marginTop: 10, fontSize: 16, marginBottom: 5 },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: colors.border,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   textArea: { height: 100, textAlignVertical: 'top', marginBottom: 15 },
-  radioGroup: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-  radioButton: {
-    flex: 1,
-    padding: 10,
-    marginHorizontal: 5,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-    alignItems: 'center'
-  },
-  radioButtonSelected: { backgroundColor: '#e21b1b' },
-  radioText: { color: '#000', fontSize: 12 },
-  radioTextSelected: { color: '#fff', fontSize: 12 },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
 });
