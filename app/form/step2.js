@@ -10,7 +10,7 @@ import FormDropdown from '../../components/FormDropdown';
 import StepFooter from '../../components/StepFooter';
 
 export default function Step2() {
-  const { formData, setFormData } = useContext(FormContext);
+  const { formData, setFormData, isHydrated } = useContext(FormContext);
   const router = useRouter();
 
   const formatDate = () => {
@@ -30,15 +30,17 @@ export default function Step2() {
 
   const { valid, errors } = validateStep(2, formData);
 
+  // Só semeia data/hora "agora" depois que a hidratação do rascunho terminou,
+  // evitando estampar a data de hoje sobre um valor restaurado do AsyncStorage.
+  // equipe/codigoIR já têm default no initialFormState.
   useEffect(() => {
+    if (!isHydrated) return;
     setFormData((prevForm) => ({
       ...prevForm,
       data: prevForm.data || formatDate(),
       hch: prevForm.hch || formatTime(),
-      equipe: prevForm.equipe || EQUIPE_OPTIONS[0],
-      codigoIR: prevForm.codigoIR || IR_OPTIONS[0],
     }));
-  }, []);
+  }, [isHydrated]);
 
   const handleChange = (field, value) => {
     let formattedValue = value;

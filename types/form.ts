@@ -90,4 +90,5 @@ export interface FormContextType {
   formData: FormData;
   setFormData: Dispatch<SetStateAction<FormData>>;
   clearForm: () => void;
+  isHydrated: boolean;
 }

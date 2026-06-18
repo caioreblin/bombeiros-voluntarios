@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useRef, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { FormData, FormContextType } from '../types/form';
+import { EQUIPE_OPTIONS, IR_OPTIONS } from '../constants/options';
 
 const STORAGE_KEY = '@bombeiros:formData';
 
@@ -16,9 +17,9 @@ const initialFormState: FormData = {
   data: '',
   hch: '',
   numeroBO: '',
-  equipe: '',
+  equipe: EQUIPE_OPTIONS[0],
   despachador: '',
-  codigoIR: '',
+  codigoIR: IR_OPTIONS[0],
   tabelaVTRs: [{ vtr: '', unidade: '', litros: '', kmFinal: '', motorista: '' }],
   tabelaServicosApoio: [{ vtr: '', cidade: '', litros: '' }],
   totalLitrosConsumidos: 0,
@@ -70,6 +71,7 @@ export const FormContext = createContext<FormContextType>({} as FormContextType)
 
 export const FormProvider = ({ children }: { children: ReactNode }) => {
   const [formData, setFormData] = useState<FormData>({ ...initialFormState });
+  const [isHydrated, setIsHydrated] = useState(false);
   const isLoaded = useRef(false);
   const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -78,10 +80,16 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       try {
         const stored = await AsyncStorage.getItem(STORAGE_KEY);
         if (stored) {
-          setFormData(JSON.parse(stored));
+          // Merge com os defaults para sobreviver a mudanças de schema
+          // (chaves novas/aninhadas ausentes em blobs antigos) e ignora
+          // valores corrompidos sem derrubar o app.
+          setFormData({ ...initialFormState, ...JSON.parse(stored) });
         }
+      } catch {
+        // storage corrompido — mantém o estado inicial
       } finally {
         isLoaded.current = true;
+        setIsHydrated(true);
       }
     })();
   }, []);
@@ -106,7 +114,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <FormContext.Provider value={{ formData, setFormData, clearForm }}>
+    <FormContext.Provider value={{ formData, setFormData, clearForm, isHydrated }}>
       {children}
     </FormContext.Provider>
   );
