@@ -28,7 +28,15 @@ export default function Step12() {
       <ToggleRow
         label="Usado Extintor"
         value={formData.usadoExtintor || false}
-        onValueChange={(value) => setFormData({ ...formData, usadoExtintor: value })}
+        onValueChange={(value) =>
+          setFormData({
+            ...formData,
+            usadoExtintor: value,
+            // Commita o default exibido no dropdown para o PDF não sair "N/A"
+            // quando o usuário liga e não toca no campo Tipo.
+            tipoExtintor: value ? formData.tipoExtintor || TIPOS_EXTINTORES[0] : formData.tipoExtintor,
+          })
+        }
       />
 
       {formData.usadoExtintor && (

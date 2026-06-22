@@ -46,29 +46,44 @@ export default function Step4() {
         style={styles.containerFlatList}
         data={formData.bombeiros}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <View style={styles.bombeiroRow}>
-            <TextInput
-              style={styles.input}
-              placeholder={`Bombeiro ${index + 1}`}
-              placeholderTextColor="#ccc"
-              value={item.nome}
-              onChangeText={(value) => handleBombeiroChange(index, 'nome', value)}
-            />
-            <FormDropdown
-              style={styles.input}
-              data={formData.tabelaVTRs?.map((val) => ({ label: val.vtr, value: val.vtr })) || []}
-              includeEmpty
-              value={item.vtr}
-              onChange={(value) => handleBombeiroChange(index, 'vtr', value)}
-            />
-            {formData.bombeiros.length > 1 && (
-              <TouchableOpacity onPress={() => handleRemoveBombeiro(index)} style={styles.removeButton}>
-                <Text style={styles.removeButtonText}>X</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
+        renderItem={({ item, index }) => {
+          // Opções vindas das viaturas do step3 (sem linhas vazias, que
+          // colidiriam com a opção "Selecione..."). Se o bombeiro já tem uma
+          // VTR que foi removida/renomeada no step3, mantém ela na lista para
+          // não apagar a seleção silenciosamente.
+          const vtrOptions = (formData.tabelaVTRs || [])
+            .map((val) => val.vtr)
+            .filter((vtr) => vtr)
+            .map((vtr) => ({ label: vtr, value: vtr }));
+          const vtrData =
+            item.vtr && !vtrOptions.some((o) => o.value === item.vtr)
+              ? [...vtrOptions, { label: item.vtr, value: item.vtr }]
+              : vtrOptions;
+
+          return (
+            <View style={styles.bombeiroRow}>
+              <TextInput
+                style={styles.input}
+                placeholder={`Bombeiro ${index + 1}`}
+                placeholderTextColor="#ccc"
+                value={item.nome}
+                onChangeText={(value) => handleBombeiroChange(index, 'nome', value)}
+              />
+              <FormDropdown
+                style={styles.input}
+                data={vtrData}
+                includeEmpty
+                value={item.vtr}
+                onChange={(value) => handleBombeiroChange(index, 'vtr', value)}
+              />
+              {formData.bombeiros.length > 1 && (
+                <TouchableOpacity onPress={() => handleRemoveBombeiro(index)} style={styles.removeButton}>
+                  <Text style={styles.removeButtonText}>X</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          );
+        }}
         ListFooterComponent={
           <>
             <Button title="Adicionar Bombeiro" onPress={handleAddBombeiro} />
