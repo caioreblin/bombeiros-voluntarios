@@ -1,3 +1,8 @@
+// Limitação conhecida: a detecção de backspace abaixo compara comprimentos e
+// assume edição NO FIM do campo. Apagar um separador no meio do texto (ou
+// editar com o cursor no meio) remove o último dígito em vez do caractere
+// alvo. É um tradeoff consciente para fazer o backspace funcionar no fim
+// (vide __tests__/utils/masks.test.js); edição no meio não é suportada.
 export function applyDigitMask(previousValue, newValue, groups, separator = '') {
   let digits = newValue.replace(/\D/g, '');
   const prevDigits = previousValue.replace(/\D/g, '');

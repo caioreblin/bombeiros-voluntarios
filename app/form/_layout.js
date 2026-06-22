@@ -2,12 +2,13 @@ import React from 'react';
 import { Slot, usePathname } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 import StepProgress from '../../components/StepProgress';
-
-const TOTAL_STEPS = 14;
+import { TOTAL_STEPS } from '../../constants/steps';
 
 export default function FormLayout() {
   const pathname = usePathname();
-  const match = pathname.match(/step(\d+)/);
+  // Extrai o número do step do caminho exato "/form/stepN" (rotas como
+  // "/form/success" não casam e a barra de progresso fica oculta).
+  const match = pathname.match(/^\/form\/step(\d+)/);
   const currentStep = match ? Number(match[1]) : null;
 
   return (
