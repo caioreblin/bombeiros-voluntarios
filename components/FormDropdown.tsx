@@ -2,12 +2,10 @@ import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { commonStyles } from '../constants/theme';
-
-type DropdownItem = { label: string; value: string };
-type DataOption = string | DropdownItem;
+import { toOptions, Option, OptionItem } from '../utils/options';
 
 interface FormDropdownProps {
-  data: DataOption[];
+  data: Option[];
   value: string;
   onChange: (value: string) => void;
   maxHeight?: number;
@@ -16,9 +14,6 @@ interface FormDropdownProps {
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
 }
-
-const normalize = (options: DataOption[]): DropdownItem[] =>
-  options.map((opt) => (typeof opt === 'string' ? { label: opt, value: opt } : opt));
 
 export default function FormDropdown({
   data,
@@ -30,8 +25,8 @@ export default function FormDropdown({
   style,
   containerStyle,
 }: FormDropdownProps) {
-  const items = normalize(data || []);
-  const finalData: DropdownItem[] = includeEmpty
+  const items = toOptions(data || []);
+  const finalData: OptionItem[] = includeEmpty
     ? [{ label: emptyLabel, value: '' }, ...items]
     : items;
 
@@ -45,7 +40,7 @@ export default function FormDropdown({
       labelField="label"
       valueField="value"
       value={value}
-      onChange={(item: DropdownItem) => onChange(item.value)}
+      onChange={(item: OptionItem) => onChange(item.value)}
       maxHeight={maxHeight}
     />
   );

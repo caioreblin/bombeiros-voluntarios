@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors, commonStyles } from '../constants/theme';
-
-type Option = string | { label: string; value: string };
+import { toOptions, Option } from '../utils/options';
 
 interface OptionSelectorProps {
   options: Option[];
@@ -11,16 +10,13 @@ interface OptionSelectorProps {
   horizontal?: boolean;
 }
 
-const normalize = (options: Option[]): { label: string; value: string }[] =>
-  options.map((opt) => (typeof opt === 'string' ? { label: opt, value: opt } : opt));
-
 export default function OptionSelector({
   options,
   selected,
   onSelect,
   horizontal = false,
 }: OptionSelectorProps) {
-  const items = normalize(options);
+  const items = toOptions(options);
 
   return (
     <View style={horizontal ? styles.rowGroup : undefined}>

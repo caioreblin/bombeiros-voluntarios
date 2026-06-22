@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity }
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
 import { validateStep } from '../../validation/stepValidation';
+import { commonStyles } from '../../constants/theme';
 import FormDropdown from '../../components/FormDropdown';
 import StepFooter from '../../components/StepFooter';
 
@@ -87,7 +88,9 @@ export default function Step4() {
         ListFooterComponent={
           <>
             <Button title="Adicionar Bombeiro" onPress={handleAddBombeiro} />
-            {errors.bombeiros && <Text style={styles.errorText}>{errors.bombeiros}</Text>}
+            {errors.bombeiros && (
+              <Text style={[commonStyles.errorText, { marginTop: 5 }]}>{errors.bombeiros}</Text>
+            )}
           </>
         }
       />
@@ -141,7 +144,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  errorText: { color: 'red', fontSize: 12, marginTop: 5, marginBottom: 10 },
   containerFlatList: {
     marginBottom: 10,
   },

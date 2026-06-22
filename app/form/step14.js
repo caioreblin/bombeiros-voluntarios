@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, ActivityIndicator, Alert, Platform } from 'react-native';
+import { View, Text, TextInput, ActivityIndicator, Alert, Platform } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
 import * as Print from 'expo-print';
@@ -8,6 +8,7 @@ import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import { validateStep } from '../../validation/stepValidation';
 import { buildReportHtml } from '../../utils/pdfTemplate';
+import { colors, commonStyles } from '../../constants/theme';
 import StepFooter from '../../components/StepFooter';
 
 const loadLogoDataUri = async () => {
@@ -24,6 +25,7 @@ const loadLogoDataUri = async () => {
         });
         return `data:image/png;base64,${base64}`;
     } catch (error) {
+        console.warn('Falha ao carregar o logo do PDF:', error);
         return '';
     }
 };
@@ -76,12 +78,12 @@ export default function Step14() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Responsável pelo Preenchimento</Text>
+        <View style={commonStyles.container}>
+            <Text style={commonStyles.label}>Responsável pelo Preenchimento</Text>
             <TextInput
-                style={styles.input}
+                style={commonStyles.input}
                 placeholder="Digite o nome do responsável"
-                placeholderTextColor="#ccc"
+                placeholderTextColor={colors.placeholder}
                 value={formData.responsavelPeloPreenchimento || ""}
                 onChangeText={(text) =>
                     setFormData({
@@ -91,11 +93,11 @@ export default function Step14() {
                 }
             />
             {errors.responsavelPeloPreenchimento && (
-                <Text style={styles.errorText}>{errors.responsavelPeloPreenchimento}</Text>
+                <Text style={commonStyles.errorText}>{errors.responsavelPeloPreenchimento}</Text>
             )}
 
             {isLoading ? (
-                <ActivityIndicator size="large" color="#e21b1b" />
+                <ActivityIndicator size="large" color={colors.primary} />
             ) : (
                 <StepFooter
                     onBack={handleBack}
@@ -107,16 +109,3 @@ export default function Step14() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  label: { fontSize: 16, marginBottom: 5 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  errorText: { color: 'red', fontSize: 12, marginTop: -5, marginBottom: 10 },
-});
