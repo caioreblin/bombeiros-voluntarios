@@ -55,7 +55,9 @@ export interface FormData {
   areaAtingida: AreaAtingida;
   areaTotal: AreaTotal;
   incendioEm: string;
+  incendioOutroTipo: string;
   detalheIncendio: string;
+  materiaisMistos: string;
   observacaoIncendio: string;
   vazamentoGas: boolean;
   tipoGasVazamento: string;

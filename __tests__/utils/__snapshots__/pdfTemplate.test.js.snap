@@ -182,6 +182,7 @@ exports[`buildReportHtml matches the snapshot for a filled report 1`] = `
                     <div><span class="details-label">Quantos:</span> 2</div>
                     <div><span class="details-label">Tipo:</span> P.Q.S</div>
                     <div><span class="details-label">Da onde:</span> Edificação</div>
+                    
                 </div>
             </div>
 

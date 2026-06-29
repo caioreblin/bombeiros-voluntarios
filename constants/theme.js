@@ -11,6 +11,12 @@ export const colors = {
   trackOn: '#ff4d4d',
   thumbOff: '#f4f3f4',
   thumbOn: '#e21b1b',
+  // Botões de navegação
+  next: '#007aff',
+  back: '#eef0f3',
+  backText: '#1f2933',
+  disabledBg: '#dfe3e8',
+  disabledText: '#9aa5b1',
 };
 
 export const commonStyles = StyleSheet.create({

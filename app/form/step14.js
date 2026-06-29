@@ -4,7 +4,7 @@ import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import { validateStep } from '../../validation/stepValidation';
 import { buildReportHtml } from '../../utils/pdfTemplate';
@@ -20,9 +20,7 @@ const loadLogoDataUri = async () => {
             return asset.uri;
         }
 
-        const base64 = await FileSystem.readAsStringAsync(asset.localUri, {
-            encoding: FileSystem.EncodingType.Base64,
-        });
+        const base64 = await new File(asset.localUri).base64();
         return `data:image/png;base64,${base64}`;
     } catch (error) {
         console.warn('Falha ao carregar o logo do PDF:', error);
@@ -45,16 +43,16 @@ export default function Step14() {
             const { uri } = await Print.printToFileAsync({ html: htmlContent });
             setIsLoading(false);
 
-            const fileName = "Relatorio_Ocorrencia.pdf";
-            const newPath = FileSystem.documentDirectory + fileName;
-
-            await FileSystem.moveAsync({
-                from: uri,
-                to: newPath,
-            });
+            const pdfFile = new File(uri);
+            const destination = new File(Paths.document, "Relatorio_Ocorrencia.pdf");
+            // move() falha se o destino já existir (PDF de uma geração anterior).
+            if (destination.exists) {
+                destination.delete();
+            }
+            pdfFile.move(destination);
 
             if (await Sharing.isAvailableAsync()) {
-                await Sharing.shareAsync(newPath);
+                await Sharing.shareAsync(destination.uri);
             } else {
                 Alert.alert(
                     "Erro",

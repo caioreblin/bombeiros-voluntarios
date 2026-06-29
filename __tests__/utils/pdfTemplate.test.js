@@ -94,4 +94,21 @@ describe('buildReportHtml', () => {
     expect(html).toContain('Lavagem de Pista');
     expect(html).toContain('G.L.P.');
   });
+
+  it('shows the custom type when incêndio is "Outro Tipo"', () => {
+    const html = buildReportHtml(
+      { ...sampleFormData, incendioEm: 'Outro Tipo', incendioOutroTipo: 'Lixão' },
+      ''
+    );
+    expect(html).toContain('Outro Tipo: Lixão');
+  });
+
+  it('shows the mixed materials when "Mista" is selected', () => {
+    const html = buildReportHtml(
+      { ...sampleFormData, detalheIncendio: 'Mista', materiaisMistos: 'alvenaria e madeira' },
+      ''
+    );
+    expect(html).toContain('Materiais (mista):');
+    expect(html).toContain('alvenaria e madeira');
+  });
 });

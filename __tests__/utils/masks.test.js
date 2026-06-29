@@ -3,6 +3,7 @@ import {
   formatDateInput,
   formatTimeInput,
   formatAreaInput,
+  formatCpfInput,
 } from '../../utils/masks';
 
 describe('formatDateInput', () => {
@@ -65,6 +66,31 @@ describe('formatAreaInput', () => {
 
   it('caps at 6 digits', () => {
     expect(formatAreaInput('', '1234567')).toBe('123456 m²');
+  });
+});
+
+describe('formatCpfInput', () => {
+  it('formats digits progressively', () => {
+    expect(formatCpfInput('', '123')).toBe('123');
+    expect(formatCpfInput('123', '1234')).toBe('123.4');
+    expect(formatCpfInput('123.456', '1234567')).toBe('123.456.7');
+    expect(formatCpfInput('123.456.789', '1234567890')).toBe('123.456.789-0');
+  });
+
+  it('formats a fully pasted CPF', () => {
+    expect(formatCpfInput('', '12345678901')).toBe('123.456.789-01');
+  });
+
+  it('strips non-digit characters', () => {
+    expect(formatCpfInput('', 'a1b2c3')).toBe('123');
+  });
+
+  it('caps at 11 digits', () => {
+    expect(formatCpfInput('', '1234567890199')).toBe('123.456.789-01');
+  });
+
+  it('backspacing over a separator removes a digit', () => {
+    expect(formatCpfInput('123.456', '123456')).toBe('123.45');
   });
 });
 

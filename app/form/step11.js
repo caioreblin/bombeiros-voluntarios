@@ -19,7 +19,7 @@ export default function Step11() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <Text style={commonStyles.title}>Houve</Text>
 
       {/* Lavagem de Pista */}

@@ -27,6 +27,25 @@ export function applyDigitMask(previousValue, newValue, groups, separator = '') 
   return result;
 }
 
+export const formatCpfInput = (prev, next) => {
+  let digits = next.replace(/\D/g, '');
+  const prevDigits = prev.replace(/\D/g, '');
+
+  // Mesmo tratamento de backspace no fim do campo usado em applyDigitMask.
+  if (next.length < prev.length && digits.length === prevDigits.length) {
+    digits = digits.slice(0, -1);
+  }
+
+  digits = digits.slice(0, 11);
+
+  let result = digits.slice(0, 3);
+  if (digits.length > 3) result += '.' + digits.slice(3, 6);
+  if (digits.length > 6) result += '.' + digits.slice(6, 9);
+  if (digits.length > 9) result += '-' + digits.slice(9, 11);
+
+  return result;
+};
+
 export const formatDateInput = (prev, next) => applyDigitMask(prev, next, [2, 2, 4], '/');
 
 export const formatTimeInput = (prev, next) => applyDigitMask(prev, next, [2, 2], ':');

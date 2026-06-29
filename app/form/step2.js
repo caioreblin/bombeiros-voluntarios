@@ -65,7 +65,7 @@ export default function Step2() {
   };
 
   return (
-    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={commonStyles.container}>
         <Text style={commonStyles.title}>Dados da Ocorrência</Text>
 
@@ -83,7 +83,7 @@ export default function Step2() {
         <Text style={commonStyles.label}>H. CH</Text>
         <TextInput
           style={commonStyles.input}
-          placeholder="Digite a data (DD/MM/AAAA)"
+          placeholder="HH:MM"
           placeholderTextColor={colors.placeholder}
           keyboardType="numeric"
           value={formData.hch}

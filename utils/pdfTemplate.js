@@ -6,6 +6,12 @@ const display = (value, fallback = 'N/A') => {
 const yesNo = (value) => (value ? 'Sim' : 'Não');
 
 export function buildReportHtml(formData, logoDataUri = '') {
+  // Quando "Outro Tipo" é escolhido na Tela 7, exibe o tipo digitado pelo usuário.
+  const incendioOrigem =
+    formData.incendioEm === 'Outro Tipo' && formData.incendioOutroTipo
+      ? `Outro Tipo: ${formData.incendioOutroTipo}`
+      : formData.incendioEm;
+
   const vtrRows = formData.tabelaVTRs
     .map(
       (vtr) => `
@@ -221,7 +227,14 @@ export function buildReportHtml(formData, logoDataUri = '') {
                     <div><span class="details-label">Usado extintor: </span> ${yesNo(formData.usadoExtintor)}</div>
                     <div><span class="details-label">Quantos:</span> ${display(formData.quantosExtintores)}</div>
                     <div><span class="details-label">Tipo:</span> ${display(formData.tipoExtintor)}</div>
-                    <div><span class="details-label">Da onde:</span> ${display(formData.incendioEm)}</div>
+                    <div><span class="details-label">Da onde:</span> ${display(incendioOrigem)}</div>
+                    ${
+                      formData.materiaisMistos
+                        ? `<div><span class="details-label">Materiais (mista):</span> ${display(
+                            formData.materiaisMistos
+                          )}</div>`
+                        : ''
+                    }
                 </div>
             </div>
 

@@ -3,6 +3,7 @@ import { View, ScrollView, Text, TextInput, Switch } from 'react-native';
 import { FormContext } from '../../context/FormContext';
 import { useRouter } from 'expo-router';
 import { validateStep } from '../../validation/stepValidation';
+import { formatCpfInput } from '../../utils/masks';
 import { VICTIM_OPTIONS } from '../../constants/options';
 import { colors, commonStyles } from '../../constants/theme';
 import OptionSelector from '../../components/OptionSelector';
@@ -26,7 +27,7 @@ export default function Step1() {
   };
 
   return (
-    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={commonStyles.container}>
         <Text style={commonStyles.title}>Informações da Vítima</Text>
 
@@ -43,10 +44,12 @@ export default function Step1() {
         <Text style={commonStyles.label}>CPF</Text>
         <TextInput
           style={commonStyles.input}
-          placeholder="Digite o CPF (somente dígitos)"
+          placeholder="000.000.000-00"
           placeholderTextColor={colors.placeholder}
           value={formData.cpf}
-          onChangeText={(value) => handleChange('cpf', value)}
+          keyboardType="numeric"
+          maxLength={14}
+          onChangeText={(value) => handleChange('cpf', formatCpfInput(formData.cpf || '', value))}
         />
 
         <Text style={commonStyles.label}>Fone</Text>

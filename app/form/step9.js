@@ -37,7 +37,7 @@ export default function Step9() {
   };
 
   return (
-    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={commonStyles.container}>
         <Text style={commonStyles.title}>Vazamento de Gás</Text>
 

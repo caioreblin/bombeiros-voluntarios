@@ -13,7 +13,16 @@ export default function Step8() {
   const options = DETALHE_INCENDIO_MAP[formData.incendioEm] || [];
 
   const handleDetailChange = (value) => {
-    setFormData({ ...formData, detalheIncendio: value });
+    setFormData({
+      ...formData,
+      detalheIncendio: value,
+      // Limpa os materiais ao sair de "Mista".
+      materiaisMistos: value === 'Mista' ? formData.materiaisMistos : '',
+    });
+  };
+
+  const handleMateriaisMistosChange = (value) => {
+    setFormData({ ...formData, materiaisMistos: value });
   };
 
   const handleObservationChange = (value) => {
@@ -29,7 +38,7 @@ export default function Step8() {
   };
 
   return (
-    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={commonStyles.container}>
         <Text style={commonStyles.title}>{formData.incendioEm}</Text>
         <OptionSelector
@@ -37,6 +46,19 @@ export default function Step8() {
           selected={formData.detalheIncendio}
           onSelect={handleDetailChange}
         />
+
+        {formData.detalheIncendio === 'Mista' && (
+          <>
+            <Text style={[commonStyles.label, { marginTop: 20 }]}>Materiais mistos:</Text>
+            <TextInput
+              style={commonStyles.input}
+              value={formData.materiaisMistos}
+              onChangeText={handleMateriaisMistosChange}
+              placeholder="Indique os materiais (ex.: alvenaria e madeira)"
+              placeholderTextColor={colors.placeholder}
+            />
+          </>
+        )}
 
         <Text style={[commonStyles.label, { marginTop: 20 }]}>Observação:</Text>
         <TextInput

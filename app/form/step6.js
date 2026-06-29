@@ -53,7 +53,7 @@ export default function Step6() {
   );
 
   return (
-    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={commonStyles.container}>
         <Text style={styles.title}>Informações Sobre o Incêndio</Text>
 

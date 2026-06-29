@@ -25,7 +25,7 @@ export default function Step5() {
   };
 
   return (
-    <ScrollView contentContainerStyle={commonStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={commonStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={commonStyles.container}>
         <Text style={commonStyles.title}>Bombeiros combatentes</Text>
 
