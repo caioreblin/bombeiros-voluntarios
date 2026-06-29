@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FormContext } from '../../context/FormContext';
 
 export default function Success() {
   const router = useRouter();
+  const { clearForm } = useContext(FormContext);
+
+  const handleNovaOcorrencia = () => {
+    clearForm();
+    router.push('/form/step1');
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ocorrência gerada com sucesso!</Text>
       <View style={styles.buttonContainer}>
         <Button title="Início" onPress={() => router.push('/')} />
-        <Button title="Nova Ocorrência" onPress={() => router.push('/form/step1')} />
+        <Button title="Nova Ocorrência" onPress={handleNovaOcorrencia} />
       </View>
     </View>
   );

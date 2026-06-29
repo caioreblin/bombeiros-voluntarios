@@ -30,7 +30,8 @@ export default function Step8() {
   };
 
   const handleNext = () => {
-    router.push('/form/step9');
+    // Tela 9 (Vazamento de Gás) removida do fluxo — vai direto para a Tela 10.
+    router.push('/form/step10');
   };
 
   const handleBack = () => {

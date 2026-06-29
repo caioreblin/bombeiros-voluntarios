@@ -1,15 +1,18 @@
 import React from 'react';
 import { Slot } from 'expo-router';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { FormProvider } from '../context/FormContext';
 
 export default function RootLayout() {
   return (
-    <FormProvider>
-      <SafeAreaView style={styles.container}>
-        <Slot />
-      </SafeAreaView>
-    </FormProvider>
+    <SafeAreaProvider>
+      <FormProvider>
+        <SafeAreaView style={styles.container}>
+          <Slot />
+        </SafeAreaView>
+      </FormProvider>
+    </SafeAreaProvider>
   );
 }
 
